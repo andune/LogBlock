@@ -461,20 +461,6 @@ public class Consumer extends TimerTask
 			PreparedStatement ps1 = null;
 			PreparedStatement ps = null;
 			try {
-				// andune note: although I've fixed the resource leak by closing the
-				// PreparedStatements, it should be noted that there is no performance
-				// benefit to PreparedStatements as used here since we are using connection
-				// pooling and don't do anything to re-use the PreparedStatement in
-				// the same connection.
-				//
-				// The only benefit would be the innate protection PreparedStatement's have
-				// from SQL injection attacks; although the original commit that introduced
-				// this code mentions nothing about that being the reason for the change.
-				//
-				// So assuming the intent of introducing the PreparedStatement was for a
-				// performance gain, that's not happening as this code is currently no
-				// different than just executing Statement.execute every insert.
-
 				ps1 = connection.prepareStatement("INSERT INTO `" + table + "` (date, playerid, replaced, type, data, x, y, z) VALUES(?, " + playerID(playerName) + ", ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 				ps1.setTimestamp(1, new Timestamp(date * 1000));
 				ps1.setInt(2, replaced);
