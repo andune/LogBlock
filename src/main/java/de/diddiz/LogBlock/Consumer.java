@@ -456,19 +456,28 @@ public class Consumer extends TimerTask
             rs.next();
             id = rs.getInt(1);
 
+            PreparedStatement ps = null;
             if (signtext != null) {
-                PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + table + "-sign` (signtext, id) VALUES(?, ?)");
+                ps = connection.prepareStatement("INSERT INTO `" + table + "-sign` (signtext, id) VALUES(?, ?)");
                 ps.setString(1, signtext);
                 ps.setInt(2, id);
                 ps.executeUpdate();
+                ps.close();
             } else if (ca != null) {
-                PreparedStatement ps = connection.prepareStatement("INSERT INTO `" + table + "-chest` (itemtype, itemamount, itemdata, id) values (?, ?, ?, ?)");
+                ps = connection.prepareStatement("INSERT INTO `" + table + "-chest` (itemtype, itemamount, itemdata, id) values (?, ?, ?, ?)");
                 ps.setInt(1, ca.itemType);
                 ps.setInt(2, ca.itemAmount);
                 ps.setInt(3, ca.itemData);
                 ps.setInt(4, id);
                 ps.executeUpdate();
+                ps.close();
             }
+
+            // really should be in a finally block, will fix after we confirm issue
+            ps1.close();
+            rs.close();
+            if( ps != null )
+            	ps.close();
         }
 	}
 
@@ -543,6 +552,7 @@ public class Consumer extends TimerTask
                 ps.setString(2, message);
             }
             ps.execute();
+            ps.close();
         }
 	}
 
