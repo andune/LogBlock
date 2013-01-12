@@ -18,6 +18,7 @@ public class InteractLogging extends LoggingListener
 		super(lb);
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		final WorldConfig wcfg = getWorldConfig(event.getPlayer().getWorld());
